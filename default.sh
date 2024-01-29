@@ -23,12 +23,12 @@ EXTENSIONS=(
     "https://github.com/AlUlkesh/stable-diffusion-webui-images-browser"
     "https://github.com/Coyote-A/ultimate-upscale-for-automatic1111"
     "https://github.com/fkunn1326/openpose-editor"
+	"https://github.com/Bing-su/adetailer.git"
 
 )
 
 CHECKPOINT_MODELS=(
 
-    "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors"
     "https://huggingface.co/dataautogpt3/ProteusV0.2/resolve/main/ProteusV0.2.safetensors"
     "https://civitai.com/api/download/models/16576"
 )
