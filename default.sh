@@ -23,7 +23,7 @@ EXTENSIONS=(
     "https://github.com/AlUlkesh/stable-diffusion-webui-images-browser"
     "https://github.com/Coyote-A/ultimate-upscale-for-automatic1111"
     "https://github.com/fkunn1326/openpose-editor"
-	"https://github.com/Bing-su/adetailer.git"
+    "https://github.com/Bing-su/adetailer.git"
 
 )
 
