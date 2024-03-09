@@ -15,6 +15,8 @@ MAMBA_PACKAGES=(
   
 PIP_PACKAGES=(
     "bitsandbytes==0.41.2.post2"
+    "insightface"
+    "basicsr"
   )
 
 EXTENSIONS=(
@@ -30,12 +32,14 @@ EXTENSIONS=(
 
 CHECKPOINT_MODELS=(
     "https://huggingface.co/dataautogpt3/ProteusV0.4/resolve/main/ProteusV0.4.safetensors"
+    "https://civitai.com/api/download/models/297740"
     #"https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.ckpt"
     #"https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors"
     #"https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/resolve/main/sd_xl_refiner_1.0.safetensors"
 )
 
 LORA_MODELS=(
+    "https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl_lora.safetensors"
     #"https://civitai.com/api/download/models/214296"
 )
 
@@ -53,7 +57,10 @@ ESRGAN_MODELS=(
 CONTROLNET_MODELS=(
     "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_canny_full.safetensors"
     "https://huggingface.co/lllyasviel/sd_control_collection/resolve/main/diffusers_xl_depth_mid.safetensors"
-  
+    "https://huggingface.co/InstantX/InstantID/resolve/main/ControlNetModel/diffusion_pytorch_model.safetensors"
+    "https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter_sdxl_vit-h.safetensors" 
+    "https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter-plus-face_sdxl_vit-h.safetensors"
+    "https://huggingface.co/h94/IP-Adapter-FaceID/resolve/main/ip-adapter-faceid-plusv2_sdxl.bin"
 )
 
 
@@ -83,7 +90,9 @@ function provisioning_start() {
     provisioning_get_models \
         "${WORKSPACE}/storage/stable_diffusion/models/esrgan" \
         "${ESRGAN_MODELS[@]}"
-     
+    
+    provisioning_rename_files
+    
     PLATFORM_FLAGS=""
     if [[ $XPU_TARGET = "CPU" ]]; then
         PLATFORM_FLAGS="--use-cpu all --skip-torch-cuda-test --no-half"
@@ -91,7 +100,7 @@ function provisioning_start() {
     PROVISIONING_FLAGS="--skip-python-version-check --no-download-sd-model --do-not-download-clip --port 11404 --exit"
     FLAGS_COMBINED="${PLATFORM_FLAGS} $(cat /etc/a1111_webui_flags.conf) ${PROVISIONING_FLAGS}"
     
-    # Start and exit because webui will probably require a restart
+    # Start and exit because webui will probably require a restart  
     cd /opt/stable-diffusion-webui && \
     micromamba run -n webui -e LD_PRELOAD=libtcmalloc.so python launch.py \
         ${FLAGS_COMBINED}
@@ -157,16 +166,22 @@ function provisioning_print_header() {
     printf "\n##############################################\n#                                            #\n#          Provisioning container            #\n#                                            #\n#         This will take some time           #\n#                                            #\n# Your container will be ready on completion #\n#                                            #\n##############################################\n\n"
     if [[ $DISK_GB_ALLOCATED -lt $DISK_GB_REQUIRED ]]; then
         printf "WARNING: Your allocated disk size (%sGB) is below the recommended %sGB - Some models will not be downloaded\n" "$DISK_GB_ALLOCATED" "$DISK_GB_REQUIRED"
-    fi
+    fi  
 }
 
 function provisioning_print_end() {
     printf "\nProvisioning complete:  Web UI will start now\n\n"
 }
 
-# Download from $1 URL to $2 file path
+# Download from $1 URL to $2 file path  
 function provisioning_download() {
-    wget -qnc --content-disposition --show-progress -e dotbytes="${3:-4M}" -P "$2" "$1"
+    wget -qnc --content-disposition --show-progress -e dotbytes="${3:-4M}" -P "$2" "$1"  
+}
+
+function provisioning_rename_files() {
+    mv "${WORKSPACE}/storage/stable_diffusion/models/ckpt/297740_DynaVision XL_sd11.safetensors" "${WORKSPACE}/storage/stable_diffusion/models/ckpt/DynaVision XL.safetensors"
+    mv "${WORKSPACE}/storage/stable_diffusion/models/controlnet/diffusion_pytorch_model.safetensors" "${WORKSPACE}/storage/stable_diffusion/models/controlnet/control_instant_id_sdxl.safetensors"
+    mv "${WORKSPACE}/storage/stable_diffusion/models/controlnet/ip-adapter.bin" "${WORKSPACE}/storage/stable_diffusion/models/controlnet/ip-adapter_instant_id_sdxl.bin"
 }
 
 provisioning_start
