@@ -21,6 +21,7 @@ EXTENSIONS=(
     "https://github.com/Physton/sd-webui-prompt-all-in-one"
     "https://github.com/Mikubill/sd-webui-controlnet"
     "https://github.com/adieyal/sd-dynamic-prompts"
+    "https://github.com/pkuliyi2015/multidiffusion-upscaler-for-automatic1111.git"
     "https://github.com/Bing-su/adetailer.git"
     "https://github.com/zanllp/sd-webui-infinite-image-browsing.git"
     "https://github.com/BlafKing/sd-civitai-browser-plus.git"
