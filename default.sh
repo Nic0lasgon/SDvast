@@ -32,6 +32,7 @@ EXTENSIONS=(
 
 CHECKPOINT_MODELS=(
     "https://civitai.com/api/download/models/297740"
+    "https://civitai.com/api/download/models/443743"
     "https://huggingface.co/Lykon/dreamshaper-xl-v2-turbo/resolve/main/DreamShaperXL_Turbo_v2_1.safetensors"
     #"https://huggingface.co/stabilityai/stable-diffusion-2-1/resolve/main/v2-1_768-ema-pruned.ckpt"
     #"https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors"
